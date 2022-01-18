@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "druk_wide";
+  src: url("./fonts/druk_wide.ttf") format("truetype");
+}
+
+* {
+  font-family: "druk_wide" !important;
+}
+
 .App {
   text-align: center;
 }
