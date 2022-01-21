@@ -21,6 +21,8 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(null)
   const [defaultAccount, setDefaultAccount] = useState(null)
   const [connButtonText, setConnButtonText] = useState("Connect Wallet")
+  const [areOpenMints, setAreOpenMints] = useState()
+  const [isPersonOwning, setIsPersonOwning] = useState()
 
   const [provider, setProvider] = useState(null)
   const [signer, setSigner] = useState(null)
@@ -61,6 +63,69 @@ function App() {
 
   const safeMint = async () => {
     await contract.safeMint(0, "0x00")
+  }
+
+  useEffect(() => {
+    const openMints = async () => {
+      const data = await contract.openMints(0)
+
+      setAreOpenMints(data)
+    }
+
+    const isOwning = async () => {
+      const is_owning = await contract.balanceOf(defaultAccount, 0)
+      setIsPersonOwning(is_owning._hex)
+    }
+
+    openMints()
+    isOwning()
+  }, [contract, setAreOpenMints, defaultAccount])
+
+  const render = () => {
+    switch (areOpenMints) {
+      case true:
+        return (
+          <p
+            css={css`
+              color: #ffffff;
+              margin-bottom: 10px;
+            `}
+          >
+            Minting is open
+          </p>
+        )
+      case false:
+        return (
+          <p
+            css={css`
+              color: #ffffff;
+              margin-bottom: 10px;
+            `}
+          >
+            Minting is closed
+          </p>
+        )
+      default:
+        break
+    }
+  }
+
+  const renderOwning = () => {
+    switch (isPersonOwning) {
+      case "0x01":
+        return (
+          <p
+            css={css`
+              color: #ffffff;
+              margin-bottom: 10px;
+            `}
+          >
+            Congrats, you already minted the NFT!
+          </p>
+        )
+      default:
+        break
+    }
   }
 
   return (
@@ -108,7 +173,6 @@ function App() {
             </a>
             .
           </h2>
-
           <div
             css={css`
               background-color: #5835e9;
@@ -134,8 +198,9 @@ function App() {
           >
             {connButtonText}
           </div>
+
           {defaultAccount && (
-            <div
+            <button
               css={css`
                 background-color: #5835e9;
                 border: none;
@@ -151,12 +216,20 @@ function App() {
                 :hover {
                   background-color: #27166f;
                 }
+                ${isPersonOwning === "0x01" &&
+                `background-color: #3d3659;
+              pointer-events: none;`}
               `}
               onClick={safeMint}
+              disabled={isPersonOwning === "0x01"}
             >
               Mint
-            </div>
+            </button>
           )}
+
+          {render()}
+
+          {renderOwning()}
           {errorMessage && (
             <p
               css={css`
