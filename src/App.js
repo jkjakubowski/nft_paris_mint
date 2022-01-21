@@ -94,7 +94,7 @@ function App() {
               }
             `}
           >
-            Thanks for attending the first edition of NFT Paris! Here's a prof
+            Thanks for attending the first edition of NFT Paris! Here's a proof
             of attendance NFT, made by {" "}
             <a
               css={css`
@@ -166,6 +166,7 @@ function App() {
             >
               The minting is over, or you already have minted one. Please
               contact the NFT Paris team.
+              {errorMessage}
             </p>
           )}
         </div>
