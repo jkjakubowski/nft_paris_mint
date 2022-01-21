@@ -37,7 +37,9 @@ function App() {
           setConnButtonText("Wallet Connected")
         })
     } else {
-      setErrorMessage("Please install MetaMask")
+      setErrorMessage(
+        "Please install MetaMask and connect to the website via the MetaMask browser"
+      )
     }
   }
 
@@ -237,8 +239,6 @@ function App() {
                 margin-bottom: 10px;
               `}
             >
-              The minting is over, or you already have minted one. Please
-              contact the NFT Paris team.
               {errorMessage}
             </p>
           )}
